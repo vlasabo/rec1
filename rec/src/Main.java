@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
@@ -7,23 +8,25 @@ public class Main {
         for (int i = 1; i < 7; i++) {
             arr.add(i);
         }
-        for (int i = 9; i > 1; i--) {
+        for (int i = 19; i > 8; i--) {
             arr.add(i);
         }
-        arr.add(11);
-        arr.add(28);
-        arr.add(14);
-        arr.add(0);
 
+
+        var copyArr=(ArrayList) arr.clone(); //отсортированный для бинарного
+        Collections.sort(copyArr);
         //вызов рекурсивных функций
         int rekSum = GetRecursSumm((ArrayList) arr.clone());
         int sizeArrayList = GetRecursSize((ArrayList) arr.clone());
         int maxArrayList = GetRecursMax((ArrayList) arr.clone(),(int) arr.get(0));
 
+        int elementPosition = findRecursiveBinary(copyArr,2,0,copyArr.size()-1);
+
         //вывод
         System.out.println("Сумма всех элементов = "+rekSum);
         System.out.println("Размер = "+sizeArrayList);
         System.out.println("Максимальный элемент = "+maxArrayList);
+        System.out.println("Позиция искомого в отсортированном массиве = "+elementPosition);
     }
 
     private static int GetRecursSumm(ArrayList arrList) {
@@ -67,4 +70,27 @@ public class Main {
 
     }
 
+
+    private static int findRecursiveBinary(ArrayList arrList, int theSearch, int startSearcIndex, int stopSearchIndex) {
+        if (stopSearchIndex-startSearcIndex>=2){
+            int halfIndex= (stopSearchIndex+startSearcIndex)/2;
+            if ((Integer) arrList.get(halfIndex)>theSearch) {
+                stopSearchIndex = halfIndex - 1;
+                return findRecursiveBinary(arrList, theSearch, startSearcIndex, stopSearchIndex);
+            }
+            else if ((Integer) arrList.get(halfIndex)<theSearch) {
+                startSearcIndex = halfIndex + 1;
+                return findRecursiveBinary(arrList, theSearch, startSearcIndex, stopSearchIndex);
+            }
+            else return halfIndex;
+        }
+        else {
+            if (theSearch == (Integer) arrList.get(startSearcIndex))
+                return startSearcIndex;
+            else if (theSearch == (Integer) arrList.get(stopSearchIndex))
+                return stopSearchIndex;
+            //else return -1;
+        }
+    return -1;
+    }
 }
